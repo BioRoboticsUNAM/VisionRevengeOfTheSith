@@ -1,0 +1,29 @@
+#include <iostream>
+#include <map>
+#include <math.h>
+#include <opencv2/core/core.hpp>
+
+class OccupGrid
+{
+public:
+	OccupGrid();
+	~OccupGrid();
+
+	float minX;
+	float minY;
+	float cellSize;
+	float maxX;
+	float maxY;
+	int cellsInX;
+	int cellsInY;
+	int totalCells;
+	float gridWidth;
+	float gridHeight;
+	void LoadParamsFromFile(std::string path);
+	std::vector<int> GetOccupiedGridIndices(cv::Mat& pointCloud, cv::Mat& outputImage, float robotX, float robotY);
+	std::string DetectObstacles(cv::Mat& pointCloud, float robotX, float robotY, float robotTheta);
+
+private:
+	int* occupancyCount;
+	bool* isOccupied;
+};

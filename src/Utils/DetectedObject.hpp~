@@ -1,0 +1,12 @@
+#pragma once
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include "PlanarHorizontalSegment.hpp"
+
+class DetectedObject
+{	
+public:
+	DetectedObject();
+	DetectedObject(std::vector< cv::Point2i > indexes, cv::Mat xyzPoints, cv::Mat oriMask, PlanarHorizontalSegment planarSeg );
+	~DetectedObject();	
+};  

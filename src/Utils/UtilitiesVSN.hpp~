@@ -1,0 +1,48 @@
+#pragma once
+//#include <Windows.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <string>
+
+#ifndef DWORD
+#define WINAPI
+typedef unsigned long DWORD;
+typedef short WCHAR;
+typedef char TCHAR;
+typedef void * HANDLE;
+#define MAX_PATH PATH_MAX
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+typedef unsigned int BOOL;
+#endif
+
+typedef struct _FILETIME {
+  DWORD dwLowDateTime;
+  DWORD dwHighDateTime;
+} FILETIME, *PFILETIME;
+
+typedef struct _WIN32_FIND_DATA {
+  DWORD    dwFileAttributes;
+  FILETIME ftCreationTime;
+  FILETIME ftLastAccessTime;
+  FILETIME ftLastWriteTime;
+  DWORD    nFileSizeHigh;
+  DWORD    nFileSizeLow;
+  DWORD    dwReserved0;
+  DWORD    dwReserved1;
+  TCHAR    cFileName[MAX_PATH];
+  TCHAR    cAlternateFileName[14];
+} WIN32_FIND_DATA, *PWIN32_FIND_DATA, *LPWIN32_FIND_DATA;
+
+#include <vector>
+//#include <boost/filesystem>
+namespace fs = boost::filesystem;
+
+class UtilitiesVSN{
+
+public:
+	static cv::Mat VGADepthToSXGA(cv::Mat m);
+	static std::vector< std::string > GetFilesFromDir(std::string directory, std::string extension=".*"); 
+	static cv::Mat SXGAToVGADepth(cv::Mat m);
+};

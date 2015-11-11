@@ -1,0 +1,79 @@
+
+#ifndef __OBJECTRECOGNIZER_HPP__
+#define __OBJECTRECOGNIZER_HPP__
+
+#include <iostream>
+//#include <direct.h>
+
+#include "opencv2/opencv.hpp"
+#include "opencv2/nonfree/nonfree.hpp"
+//#include "opencv2/nonfree/ocl.hpp"
+//#include "opencv2/ocl/ocl.hpp"
+#include "opencv2/nonfree/features2d.hpp"
+#include "opencv2/features2d/features2d.hpp"
+
+#include "LineSegment.h"
+#include "LineSegment.cpp"
+#include "UtilitiesVSN.hpp"
+#include "UtilitiesVSN.cpp"
+#include "Plane3D.hpp"
+#include "Plane3D.cpp"
+
+
+#ifndef DWORD
+#define WINAPI
+typedef unsigned long DWORD;
+typedef short WCHAR;
+typedef char TCHAR;
+typedef void * HANDLE;
+#define MAX_PATH PATH_MAX
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+typedef unsigned int BOOL;
+#endif
+
+class ObjectRecognizer{
+
+private:
+
+	std::string name; 
+
+	std::string trainingDir;		// Directory were the images to train are
+	std::string trainingFile;	// File with names of the images to train 
+	std::string detectorType;	
+	std::string descriptorType;	
+
+	cv::Ptr< cv::FeatureDetector > featDetector; 
+	cv::Ptr< cv::DescriptorExtractor > featDescriptor;
+	cv::Ptr< cv::DescriptorMatcher > featMatcher;
+	
+	//cv::ocl::SURF_OCL oclSurf; 
+	cv::SURF surf; 
+
+	std::vector< cv::Mat > trainingImages;
+	std::vector< std::string > trainingNames; 
+
+	std::vector< std::vector< cv::KeyPoint > > trainingFeatures;
+	std::vector< cv::Mat > trainingDescriptors;
+	std::vector< cv::Ptr< cv::DescriptorMatcher > > trainingMatchers; 
+
+public:
+	ObjectRecognizer();
+	ObjectRecognizer(std::string detectorType, std::string descriptorType, std::string trainingDir="ObjRecoDir", std::string trainingFile="ObjRecoFile"); 
+	
+	bool debugMode; 
+	int maxBestMatches; 
+
+	void TrainingFromDirectory();
+
+	std::string RecognizeObject(cv::Mat& originalImage, cv::Mat& outObjectInScene); 
+	bool ValideteHomography( std::vector< cv::Point2f > trainCorners, std::vector< cv::Point2f > trainCornersTrans, cv::Mat homography ); 
+
+	std::vector< std::string > GetFilesFromDir(std::string directory); 
+
+	~ObjectRecognizer()
+	{
+	}
+}; 
+
+#endif

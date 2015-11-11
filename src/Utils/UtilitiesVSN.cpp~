@@ -1,0 +1,56 @@
+#include "UtilitiesVSN.hpp"
+
+cv::Mat UtilitiesVSN::VGADepthToSXGA(cv::Mat m){
+	cv::Mat n( 1024, 1280, m.type() ); 
+
+	int horRes = 1280; 
+	int verRes = 480.0f*1280.0f/640.0f; 
+	cv::Mat resized; 
+	cv::resize(m, resized, cv::Size(horRes, verRes)); 
+	resized.copyTo( n( cv::Rect(0,0,horRes,verRes ) ) ); 
+	return n; 
+}
+
+cv::Mat UtilitiesVSN::SXGAToVGADepth(cv::Mat m){
+	cv::Mat n = cv::Mat::zeros( 480, 640, m.type() ); 
+
+	cv::Mat resized; 
+	cv::resize(m, resized, cv::Size(640, 480)); 
+	return resized; 
+}
+
+
+std::vector< std::string > UtilitiesVSN::GetFilesFromDir(std::string directory, std::string extension){
+/*
+	HANDLE hFind;
+	WIN32_FIND_DATA data;
+
+	std::string dirToSearch =  directory + "\\*" + extension; 
+	std::vector< std::string > filesFound = std::vector< std::string >(); 
+
+	hFind = FindFirstFile( dirToSearch.c_str(), &data);
+	//if (hFind != INVALID_HANDLE_VALUE) {
+	if (hFind != INVALID_HANDLE_VALUE) {
+		
+		do {
+			filesFound.push_back( data.cFileName ); 
+			//printf("%s\n", data.cFileName);
+		} while (FindNextFile(hFind, &data));
+	  
+		FindClose(hFind);
+	}
+
+	return filesFound;
+*/
+
+	std::vector< std::string > filesFound = std::vector< std::string >(); 
+	fs::path directory(".");
+	fs::directory_iterator iter(directory), end;
+	    
+	for(;iter != end; ++iter)
+		if (iter->path().extension() == extension)
+			filesFound.push_back(iter->path().filename().string());
+ 
+	return filesFound;
+
+}
